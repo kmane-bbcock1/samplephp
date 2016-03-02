@@ -9,5 +9,23 @@ php:
   - 7.0
   
 build:
+  pre_ci:
+    - docker build -t=shippabledocker/shiphitchcock1_sample_php_unofficial .
+
+  pre_ci_boot:
+    image_name: shippabledocker/shiphitchcock1_sample_php_unofficial
+    image_tag: latest
+    pull: false
+    
   ci:
-    - php --version
+    - php --version 
+   # - ps -eax
+   # - ls -al 
+
+  post_ci:
+    - docker push shippabledocker/shiphitchcock1_sample_php_unofficial
+
+integrations:
+  hub:
+    - integrationName: ship-docker
+      type: docker
