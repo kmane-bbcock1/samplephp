@@ -4,10 +4,29 @@ language: php
 #Version number
 php:
   - 5.4
-  - 5.5
-  - 5.6
-  - 7.0
+ # - 5.5
+  #- 5.6
+ # - 7.0
   
 build:
+ # pre_ci:
+  #  - docker build -t=shippabledocker/shiphitchcock1_sample_php_unofficial .
+
+  pre_ci_boot:
+    image_name: drydock/u14phpall
+    image_tag: prod
+    pull: true
+    
   ci:
-    - php --version
+    - php --version 
+   # - ps -eax
+   # - ls -al 
+
+  post_ci:
+    - docker build -t=shippabledocker/shiphitchcock1_sample_php_unofficial:$BRANCH.$BUILD_NUMBER .
+    - docker push shippabledocker/shiphitchcock1_sample_php_unofficial:$BRANCH.$BUILD_NUMBER
+
+integrations:
+  hub:
+    - integrationName: ship-docker
+      type: docker
